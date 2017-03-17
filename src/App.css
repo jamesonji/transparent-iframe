@@ -1,0 +1,67 @@
+.App {
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.xianliaome__component__container{
+    width: 100%;
+    height: 100%;
+}
+
+
+.test{
+    position: fixed;
+    /*float: left;*/
+    height: 80%;
+    max-height: 600px;
+    min-height: 400px;
+    width: 30%;
+    max-width: 200px;
+    min-width: 100px;
+    right:0px;
+    top:0px;
+    background: lightblue;
+}
+
+.test-1{
+    position: fixed;
+    /*float: left;*/
+    left: 20%;
+    top: 70%;
+    width: 60%;
+    min-width: 300px;
+    max-width: 500px;
+    height: 20%;
+    min-height: 200px;
+    max-height: 300px;
+    background: lightgreen;
+}
+
+.test-2{
+    position: fixed;
+    /*float: left;*/
+    left: 0%;
+    top:0%;
+    width: 50%;
+    min-width: 150px;
+    max-width: 600px;
+    height: 30%;
+    min-height: 180px;
+    max-height: 200px;
+    background: pink;
+}
+
+.test-3{
+    position: fixed;
+    /*float: left;*/
+    top: 40%;
+    left:10%;
+    width: 70%;
+    max-width: 300px;
+    min-width: 200px;
+    height: 30%;
+    min-height: 200px;
+    max-height: 250px;
+    background: yellow;
+}

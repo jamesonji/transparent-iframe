@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="underscore.js"></script>
+    <script type="text/javascript" src="./brain.js"></script>
+    <title>React App</title>
+  </head>
+
+  <script>
+  var getBoundaries = function(){
+      var containers = document.getElementsByClassName('xianliaome__component__container');
+      var boundaries = [];
+      for (var i = 0; i < containers.length; i++ ){
+          var rect;
+          if(containers[i].firstChild){
+              rect = containers[i].firstChild.getBoundingClientRect();
+          }else{
+              rect = containers[i].getBoundingClientRect();
+          }
+          boundaries.push({top: rect.top, left: rect.left, right: rect.right, bottom: rect.bottom, height:rect.height, width:rect.width});
+      }
+      return boundaries;
+  }
+
+  var updateFootPrint = function(){
+
+      var boundaries = getBoundaries();
+
+      var payload = {
+          name: 'UPDATE_FOOTPRINT',
+          data: boundaries
+      };
+      payload = JSON.stringify(payload);
+
+      parent.postMessage(payload,'http://localhost:8888');
+  };
+
+  var boundaryVarification = function(x, y, footprintDim){
+      var universe = 'COMMUNITY';
+
+      for(var i = 0; i < footprintDim.length; i++){
+
+        var fp = footprintDim[i];
+
+        if( (x > fp.left && x < fp.right) && ( y > fp.top && y < fp.bottom)){
+            universe =  'XIANLIAO';
+            break;
+        }else{
+            universe = 'COMMUNITY';
+        }
+    }
+    return universe;
+  }
+
+  var disableIframe = function(){
+      var payload = {
+          name: 'DISABLE_IFRAME',
+          data: true
+      };
+      payload = JSON.stringify(payload);
+
+      parent.postMessage(payload,'http://localhost:8888');
+  }
+
+
+  $(document).ready(function(){
+
+    updateFootPrint();
+
+    $(document).on('mouseleave', '.xianliaome__component__container', function(e) {
+        // disableIframe();
+    });
+
+    $(window).resize(function(){
+        updateFootPrint();
+    });
+
+    brain.subscribeToEvent('UPDATE_FOOTPRINT', function(payload){
+        updateFootPrint();
+    });
+
+    $(document).on('touchstart', '.transparent-layer', function(e) {
+        var xPos = e.originalEvent.touches[0].pageX;
+        var yPos = e.originalEvent.touches[0].pageY;
+        payload = {
+            name: 'WORMHOLE',
+            data: {
+                xPos: xPos,
+                yPos: yPos
+                }
+        }
+        payload = JSON.stringify(payload);
+        parent.postMessage(payload, 'http://localhost:8888');
+    });
+
+    document.onmousemove = function(e){
+        payload = {
+            name: 'WORMHOLE',
+            data: {
+                xPos: e.pageX,
+                yPos: e.pageY
+                }
+        }
+        payload = JSON.stringify(payload);
+        parent.postMessage(payload, 'http://localhost:8888');
+    };
+  });
+
+  </script>
+
+  <body>
+    <div className="transparent-layer"></div>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Sample Community</title>
+        <script src="jquery-1.11.2.min.js"></script>
+    </head>
+    <body style="background-color: #1595A3">
+        <script>
+
+            var currentUniverse = '';
+            var wormhole = function(x,y) {
+
+                var focusOnCommunity = function(){
+                    if (currentUniverse !== 'Community') {
+                        console.log('Focus on Community');
+                        var $iframe = $('#xianliaome_iframe');
+                        $iframe.css({
+                            'pointer-events': 'none'
+                        });
+                        currentUniverse = 'Community';
+                    }
+                };
+
+                var focusOnXianliaoMe = function() {
+                    if (currentUniverse !== 'Xianliao') {
+                        console.log('Focus on Xianliao');
+                        var $iframe = $('#xianliaome_iframe');
+                        $iframe.css({
+                            'pointer-events': 'auto'
+                        });
+                        currentUniverse = 'Xianliao';
+
+                    }
+
+                };
+
+                var windowWidth = window.innerWidth;
+
+                if (windowWidth-x < 200) {
+                    focusOnXianliaoMe();
+                }  else {
+                    focusOnCommunity();
+                }
+            }
+
+
+            $(document).ready(function(){
+                $(document).on('touchstart', 'body', function(e) {
+                    var xPos = e.originalEvent.touches[0].pageX;
+                    var yPos = e.originalEvent.touches[0].pageY;
+                    wormhole(xPos, yPos);
+                });
+
+                document.onmousemove = function(e){
+                    wormhole(e.clientX, e.clientY);
+                };
+            });
+        </script>
+
+        <button  onclick="alert('嘿嘿')" style="height: 600px; width: 200px; background-color: #ACF0F2;">poke me!!</button>
+
+        <iframe id="xianliaome_iframe" style="pointer-events: none; position: absolute; height:100%; width: 100%; top:0px; left:0px" src="xianliao.html" />
+
+    </body>
+</html>
