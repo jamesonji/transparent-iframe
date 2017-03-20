@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Sample Xianliaome</title>
+        <script src="jquery-1.11.2.min.js"></script>
+    </head>
+    <body>
+
+    <script>
+
+        $(document).ready(function(){
+
+            $(document).on('touchstart', 'body', function(e) {
+                var xPos = e.originalEvent.touches[0].pageX;
+                var yPos = e.originalEvent.touches[0].pageY;
+                parent.wormhole(xPos, yPos);
+            });
+
+            document.onmousemove = function(e){
+                parent.wormhole(e.clientX, e.clientY);
+            };
+        });
+
+
+    </script>
+
+    <button onclick="alert('stop it!')" style="position: absolute; right:0px; height: 600px; width: 200px; background-color: #FFFFF5;">poke me!!</button>
+
+    </body>
+</html>

@@ -1,0 +1,229 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=375, initial-scale=0.5, user-scalable=no">
+        <title>Sample Community</title>
+        <script src="jquery-1.11.2.min.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <script type="text/javascript">
+        xlmIframe = document.createElement('iframe');
+        xlmIframe.setAttribute('frameborder', '0');
+        xlmIframe.setAttribute('scrolling', 'no');
+
+        var base_url = window.location.origin;
+        var host = window.location.host;
+        var pathArray = window.location.pathname.split('/');
+
+        xlmIframeSrc = base_url + '/lab/kid'; // localhost:xxxx/lab/kid
+
+        var currentUniverse = '';
+        var footprintDim = [];
+
+        var buttonAlert = function(k){
+            alert(k);
+        }
+
+        var wormhole = function(x,y) {
+            var tmpUniverse = 'Community';
+            var focusOnCommunity = function(){
+                if (currentUniverse !== 'Community') {
+                    var iframe = document.getElementById('xianliaome_iframe');
+                    iframe.style['pointer-events'] = 'none';
+                    currentUniverse = 'Community';
+                }
+            };
+
+            var focusOnXianliaoMe = function() {
+                if (currentUniverse !== 'Xianliao') {
+                    var iframe = document.getElementById('xianliaome_iframe');
+                    iframe.style['pointer-events'] = 'auto';
+                    currentUniverse = 'Xianliao';
+                }
+            };
+
+            for(var i = 0; i < footprintDim.length; i++){
+                var fp = footprintDim[i];
+                if( (x > fp.left && x < fp.right) && ( y > fp.top && y < fp.bottom)){
+                    tmpUniverse = 'Xianliao';
+                    break;
+                }else{
+                    tmpUniverse = 'Community';
+                }
+            }
+
+            if(tmpUniverse === 'Xianliao'){
+                focusOnXianliaoMe();
+            }else{
+                focusOnCommunity();
+            }
+        }
+
+        var createButtonGroup = function(){
+            var buttonGroupHTML;
+            var k = 0;
+            for(var i=0; i <= 10; i ++){
+                for (var j = 0; j<= 8; j++){
+                    buttonGroupHTML += '<button onclick="buttonAlert('+ k +')" style="position:absolute; left: '+ 300*j+'px; top: ' + i * 300+ 'px;height:300px; width: 300px;background:white;">'+ k +'</button>';
+                    k++;
+                }
+            }
+            document.getElementsByClassName('button-group')[0].innerHTML += buttonGroupHTML;
+        }
+
+        $(document).ready(function(){
+            createButtonGroup();
+
+            var xMousePos = 0;
+            var yMousePos = 0;
+            var lastScrolledLeft = 0;
+            var lastScrolledTop = 0;
+
+            var dw = document.body.scrollWidth;
+            var dh = document.body.scrollHeight;
+
+            //-- Canvas constants --
+            var canvas = document.getElementById('filter-monitor');
+            var cursor_canvas = document.getElementById('cursor-canvas');
+            var ctx = canvas.getContext('2d');
+            var cursor_ctx = cursor_canvas.getContext('2d');
+
+            ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+
+            //---- switch between iframe and parent ---
+
+            $(document).on('touchstart' ,'body', function(e) {
+                var xPos = e.originalEvent.touches[0].clientX;
+                var yPos = e.originalEvent.touches[0].clientY;
+                wormhole(xPos, yPos);
+            });
+
+            $(document).on('mouseover', '.footprint-div', function(e){
+                document.getElementById('xianliaome_iframe').style['pointer-events'] = 'auto';
+                currentUniverse = 'Xianliao';
+            })
+
+            document.onmousemove = function(e){
+                updateCursorCanvas(e.pageX, e.pageY);
+                captureMousePosition(e);
+            };
+
+            var updateFilterMonitor = function(footprintDim){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                var wl = window.pageXOffset;
+                var wt = window.pageYOffset;
+                var ww = window.innerWidth;
+                var wh = window.innerHeight;
+
+                for(var i = 0; i < footprintDim.length; i++){
+                    // Draw React component
+                    var x = Math.round((footprintDim[i].left + wl)/dw * canvas.width);
+                    var y = Math.round((footprintDim[i].top + wt)/dh  * canvas.height);
+                    var w = Math.round(footprintDim[i].width/dw * canvas.width);
+                    var h = Math.round(footprintDim[i].height/dh *canvas.height);
+                    ctx.fillRect(x,y,w,h);
+                }
+
+                // Draw Viewport container
+                var x = Math.round(wl/dw * canvas.width);
+                var y = Math.round(wt/dh  * canvas.height);
+                var w = Math.round(ww/dw * canvas.width);
+                var h = Math.round(wh/dh *canvas.height);
+
+                ctx.strokeRect(x, y, w, h);
+
+            };
+
+            var updateCursorCanvas = function(x,y){
+                // Draw Cursor
+                if(currentUniverse === 'Xianliao'){
+                    cursor_ctx.fillStyle = "white";
+                }else{
+                    cursor_ctx.fillStyle = "red";
+                }
+                cursor_ctx.clearRect(0, 0, cursor_canvas.width, cursor_canvas.height);
+                var mx = Math.round(x/dw * cursor_canvas.width);
+                var my = Math.round(y/dh * cursor_canvas.height);
+                cursor_ctx.fillRect(mx,my,2,2);
+            }
+
+            function captureMousePosition(event){
+                xMousePos = event.pageX;
+                yMousePos = event.pageY;
+            }
+
+            $(window).on('scroll', function(e) {
+                // Draw footprint on canvas
+                updateFilterMonitor(footprintDim);
+
+                // Update cursor position when scroll
+                if(lastScrolledLeft != $(document).scrollLeft()){
+                    xMousePos -= lastScrolledLeft;
+                    lastScrolledLeft = $(document).scrollLeft();
+                    xMousePos += lastScrolledLeft;
+                }
+                if(lastScrolledTop != $(document).scrollTop()){
+                    yMousePos -= lastScrolledTop;
+                    lastScrolledTop = $(document).scrollTop();
+                    yMousePos += lastScrolledTop;
+                }
+
+                // Draw cursor on the cursor_canvas
+                updateCursorCanvas(xMousePos, yMousePos);
+            });
+
+            window.addEventListener('message',
+                function(e){
+                    if(e.origin !=='http://localhost:3000'){ return; }
+
+                    var payload = JSON.parse(e.data);
+
+                    switch (payload.name) {
+                        case 'UPDATE_FOOTPRINT':
+                            // vanila js not working well here
+                            $('.footprint-div').remove();
+                            footprintDim = payload.data;
+                            var insertHTML = '';
+                            for(var i = 0; i < footprintDim.length; i++){
+                                insertHTML += '<div class="footprint-div" style="z-index:1; position:fixed; height:' +
+                                                                                footprintDim[i].height + 'px; width:' +
+                                                                                footprintDim[i].width  + 'px; left: ' +
+                                                                                footprintDim[i].left   + 'px; top: '  +
+                                                                                footprintDim[i].top    + 'px;'        +
+                                                                                '"></div>';
+                            }
+                            $('body').append(insertHTML);
+                            updateFilterMonitor(footprintDim);
+                            break;
+
+                        case 'DISABLE_IFRAME':
+                            currentUniverse = 'Community';
+                            $('#xianliaome_iframe').css({'pointer-events':'none'});
+                            break;
+
+                        case 'WORMHOLE':
+                            wormhole(payload.data.xPos, payload.data.yPos);
+                            var xPos = payload.data.xPos + window.scrollX;
+                            var yPos = payload.data.yPos + window.scrollY;
+                            updateCursorCanvas(xPos, yPos);
+                            break;
+
+                        default:
+                            break;
+                    }
+                },
+                false);
+        });
+    </script>
+
+    <body style="background-color: #1595A3">
+        <div class="button-group" style="position: absolute !important;">
+        </div>
+        <div style="z-index:999; pointer-events:none; position:fixed; width: 300px; height:200px; left:0px; bottom:0px; background-color: rgba(0, 0, 0, 0.3);">
+            <canvas id="filter-monitor" width="300" height="200"></canvas>
+        </div>
+        <div style="z-index:999; pointer-events:none; position:fixed; width: 300px; height:200px; left:0px; bottom:0px;">
+            <canvas id="cursor-canvas" width="300" height="200"></canvas>
+        </div>
+        <iframe id="xianliaome_iframe" frameBorder="0" style="z-index:2;frameborder:0;pointer-events: none; position: fixed; scrolling:no; height:100%; width: 100%; top:0; left:0; right:0; bottom:0;" src='http://localhost:3000'/>
+    </body>
+</html>
