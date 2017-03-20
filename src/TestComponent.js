@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 
 export default class TestComponent extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            id: props.name,
+        }
+    }
+
     componentDidMount(){
         window.brain.broadcastEvent('UPDATE_FOOTPRINT', true);
     }
@@ -9,22 +16,30 @@ export default class TestComponent extends Component {
         window.brain.broadcastEvent('UPDATE_FOOTPRINT', true);
     }
 
-    alertMessage(){
+    componentDidUnMount(){
+        window.brain.broadcastEvent('UPDATE_FOOTPRINT', true);
+    }
+
+    removeComponent = (id) => {
+        this.props.removeComponent(id);
+    }
+
+    alertMessage = () =>{
         alert('In React');
     }
 
   render() {
     return (
-        <div className='xianliaome__component__container'>
-        {this.props.show ?
-            (<div className="test-1" onClick={this.alertMessage}>
+        <div className='xianliaome__component__container' key={this.props.name}>
+        {this.props.show?
+            <div className="test-1" onClick={this.alertMessage}>
                 <div className="xianliao">
-                    <p>TEST 1</p>
+                    <p>Test {this.props.name}</p>
                 </div>
-            </div>)
-                :
-                null
-            }
+            </div>
+            :
+            null
+        }
         </div>);
   }
 }
