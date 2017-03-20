@@ -31,15 +31,11 @@ export default class TestComponent extends Component {
   render() {
     return (
         <div className='xianliaome__component__container' key={this.props.name}>
-        {this.props.show?
             <div className="test-1" onClick={this.alertMessage}>
                 <div className="xianliao">
                     <p>Test {this.props.name}</p>
                 </div>
             </div>
-            :
-            null
-        }
         </div>);
   }
 }

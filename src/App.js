@@ -10,7 +10,7 @@ class ComponentList extends React.Component {
     return (
       <ul>
         {this.props.items.map(item => (
-          <TestComponent show={this.props.show} key={item.id} name={item.id} removeComponent={this.removeComponent.bind(this)}/>
+          <TestComponent key={item.id} name={item.id} removeComponent={this.removeComponent.bind(this)}/>
       ))}
       </ul>
     );
@@ -39,7 +39,6 @@ class App extends Component {
     constructor (props){
         super(props);
         this.state={
-            showComponents: false,
             componentNum: 0,
             items:[],
         }
@@ -74,18 +73,6 @@ class App extends Component {
         })
     }
 
-    showComponent = () => {
-        this.setState({
-            showComponents: true
-        })
-    }
-
-    closeComponent = () => {
-        this.setState({
-            showComponents: false
-        })
-    }
-
     alertMessage = () =>{
         alert('In React');
     }
@@ -95,10 +82,6 @@ class App extends Component {
       <div className="App">
         <div className='xianliaome__component__container'>
             <div className="test">
-                <button onClick={this.state.showComponents? (this.closeComponent) : (this.showComponent)}
-                        className='xianliao__button'>
-                        Show/Close
-                </button>
                 <button onClick={this.addComponent}
                         className='xianliao__button'>
                         Add
@@ -110,7 +93,7 @@ class App extends Component {
 
             <ComponentList items={this.state.items}
                             removeComponent={this.removeComponent}
-                            show={this.state.showComponents}/>
+                            />
 
             <div className="transparent-layer"></div>
         </div>

@@ -41,34 +41,6 @@
       parent.postMessage(payload,parentURL);
   };
 
-  var boundaryVarification = function(x, y, footprintDim){
-      var universe = 'COMMUNITY';
-
-      for(var i = 0; i < footprintDim.length; i++){
-
-        var fp = footprintDim[i];
-
-        if( (x > fp.left && x < fp.right) && ( y > fp.top && y < fp.bottom)){
-            universe =  'XIANLIAO';
-            break;
-        }else{
-            universe = 'COMMUNITY';
-        }
-    }
-    return universe;
-  }
-
-  var disableIframe = function(){
-      var payload = {
-          name: 'DISABLE_IFRAME',
-          data: true
-      };
-      payload = JSON.stringify(payload);
-
-      parent.postMessage(payload, parentURL);
-  }
-
-
   $(document).ready(function(){
     updateFootPrint();
 
