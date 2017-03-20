@@ -28,6 +28,7 @@
 .test-1{
     float: left;
     display: inline-block;
+    margin: 10px;
     width: 20%;
     min-width: 200px;
     max-width: 300px;
@@ -35,34 +36,6 @@
     min-height: 200px;
     max-height: 300px;
     background: rgba(32,44,123,0.4);
-}
-
-.test-2{
-    float: left;
-    display: inline-block;
-    left: 0%;
-    top:0%;
-    width: 20%;
-    min-width: 150px;
-    max-width: 600px;
-    height: 30%;
-    min-height: 180px;
-    max-height: 200px;
-    background: pink;
-}
-
-.test-3{
-    float: left;
-    display: inline-block;
-    top: 40%;
-    left:10%;
-    width: 70%;
-    max-width: 300px;
-    min-width: 200px;
-    height: 30%;
-    min-height: 200px;
-    max-height: 250px;
-    background: yellow;
 }
 
 .xianliao__button{

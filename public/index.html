@@ -12,6 +12,7 @@
   </head>
 
   <script>
+  var parentURL = document.referrer;
   var getBoundaries = function(){
       var containers = document.getElementsByClassName('xianliaome__component__container');
       var boundaries = [];
@@ -37,7 +38,7 @@
       };
       payload = JSON.stringify(payload);
 
-      parent.postMessage(payload,'http://localhost:8888');
+      parent.postMessage(payload,parentURL);
   };
 
   var boundaryVarification = function(x, y, footprintDim){
@@ -64,12 +65,11 @@
       };
       payload = JSON.stringify(payload);
 
-      parent.postMessage(payload,'http://localhost:8888');
+      parent.postMessage(payload, parentURL);
   }
 
 
   $(document).ready(function(){
-
     updateFootPrint();
 
     $(document).on('mouseleave', '.xianliaome__component__container', function(e) {
@@ -95,7 +95,7 @@
                 }
         }
         payload = JSON.stringify(payload);
-        parent.postMessage(payload, 'http://localhost:8888');
+        parent.postMessage(payload, parentURL);
     });
 
     document.onmousemove = function(e){
@@ -107,7 +107,7 @@
                 }
         }
         payload = JSON.stringify(payload);
-        parent.postMessage(payload, 'http://localhost:8888');
+        parent.postMessage(payload, parentURL);
     };
   });
 

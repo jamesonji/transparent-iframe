@@ -25,7 +25,7 @@ export default class TestComponent extends Component {
     }
 
     alertMessage = () =>{
-        alert('In React');
+        alert(`In React Component ${this.state.id}`);
     }
 
   render() {

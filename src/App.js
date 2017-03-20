@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import TestComponent from './TestComponent';
-import TestComponent2 from './TestComponent2';
-import TestComponent3 from './TestComponent3';
 import './App.css';
 
 class ComponentList extends React.Component {
@@ -68,7 +66,6 @@ class App extends Component {
 
     removeComponent = (id) =>{
         let prevItems = this.state.items;
-        console.log(prevItems);
         var restItems = prevItems.filter((item)=>{
             return item.id !== id;
         })
@@ -115,10 +112,6 @@ class App extends Component {
                             removeComponent={this.removeComponent}
                             show={this.state.showComponents}/>
 
-            <div className='xianliao__fixed__container'>
-                <TestComponent2 show={this.state.showComponents}/>
-                <TestComponent3 show={this.state.showComponents}/>
-            </div>
             <div className="transparent-layer"></div>
         </div>
 
