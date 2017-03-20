@@ -21,6 +21,7 @@ export default class TestComponent extends Component {
     }
 
     removeComponent = (id) => {
+        alert(id);
         this.props.removeComponent(id);
     }
 

@@ -47,7 +47,7 @@ class App extends Component {
         window.brain.broadcastEvent('UPDATE_FOOTPRINT', true);
     }
 
-    componentWillUpdate(){
+    componentDidUpdate(){
         window.brain.broadcastEvent('UPDATE_FOOTPRINT', true);
     }
 
